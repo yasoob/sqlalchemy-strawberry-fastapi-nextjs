@@ -1,0 +1,48 @@
+query Books {
+  books {
+    ...BookFields
+  }
+}
+
+query Authors {
+  authors {
+    ...AuthorFields
+  }
+}
+
+fragment BookFields on Book {
+  id
+  name
+  author {
+    name
+  }
+}
+
+fragment AuthorFields on Author {
+  id
+  name
+}
+
+mutation AddBook($name: String!, $authorName: String!) {
+  addBook(name: $name, authorName: $authorName) {
+      __typename
+    ... on Book {
+      __typename
+      ...BookFields
+    }
+  }
+}
+
+mutation AddAuthor($name: String!) {
+  addAuthor(name: $name) {
+    __typename
+    ... on AuthorExists {
+      __typename
+      message
+    }
+    ... on Author {
+      __typename
+      ...AuthorFields
+    }
+  }
+}
